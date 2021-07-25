@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+</head>
+
+<body>
+    <h1>Welcome to my Gallery</h1>
+    <h2>Have a look at my photos</h2>
+    <br><br>
+    <a href="{% url 'addImage' %}"> <button>Add a new photo</button> </a>
+    <br><br><br>
+
+    <a href="{% url 'gallery' %}"> <button style="background-color: rgb(223, 126, 126);">Go to Gallery</button> </a>
+    <br><br><br>
+
+
+    {% if paginated_image.has_other_pages %}
+    <div class="pagination">
+        {% if paginated_image.has_previous %}
+        <a href="?page={{ paginated_image.previous_page_number }}">&laquo;</a>
+        {% else %}
+        <a class="disabled"><span>&laquo;</span></a>
+        {% endif %}
+        {% for i in paginated_image.paginator.page_range %}
+        {% if images.number == i %}
+        <a> <button>{{ i }}</button> </a>
+        {% else %}
+        <a href="?page={{ i }}"> <button>{{ i }}</button> </a>  &nbsp;
+        {% endif %}
+        {% endfor %}
+        {% if paginated_image.has_next %}
+        <a href="?page={{ paginated_image.next_page_number }}">&raquo;</a>
+        {% else %}
+        <a class="disabled"><span>&raquo;</span></a>
+        {% endif %}
+    </div>
+    {% endif %}
+    <br><br><br>
+
+    <table>
+        <tr>
+            {% for img in images %}
+            <a href="{% url 'image' img.id %}">
+                <img src="{{img.image}}" alt="Hi There" style="width: 10em;">
+            </a>
+            <br />
+            {% for tag in img.tags %}
+            <a href="{%url 'gallery' %}?tag={{tag}}">{{tag}}</a> &nbsp;
+            {% endfor %}
+            <br /><br />
+            {% endfor %}
+        </tr>
+    </table>
+</body>
+
+</html>
